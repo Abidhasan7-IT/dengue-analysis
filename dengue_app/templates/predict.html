@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Assess a patient{% endblock %}
+{% block content %}
+
+<section class="hero" style="padding-bottom: 24px;">
+  <h1>Assess a patient</h1>
+  <p class="lede">Enter vitals, labs and symptoms to get a risk score with the factors behind it. This supports a clinical decision — it does not replace laboratory-confirmed diagnosis (NS1/IgM).</p>
+</section>
+
+<div class="predict-layout">
+  <form id="predict-form" autocomplete="off">
+    <fieldset>
+      <legend>Demographics</legend>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="Age">Age</label>
+          <input type="number" id="Age" name="Age" min="0" max="110" required
+               placeholder="Enter age">
+        </div>
+        <div class="form-group">
+          <label for="Gender">Gender</label>
+          <select id="Gender" name="Gender" required>
+            <option value="" selected disabled>Select gender</option>
+            {% for g in meta.categorical_choices.Gender %}<option value="{{ g }}">{{ g }}</option>{% endfor %}
+          </select>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Vitals &amp; labs</legend>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="Body_Temperature">Body temperature (&deg;C)</label>
+          <input type="number" step="0.1" id="Body_Temperature" name="Body_Temperature" required
+                 min="{{ meta.numeric_ranges.Body_Temperature.min }}" max="{{ meta.numeric_ranges.Body_Temperature.max }}"
+               placeholder="Enter temperature">
+          <p class="field-hint">Flagged clinically at &ge; 38&deg;C</p>
+        </div>
+        <div class="form-group">
+          <label for="Fever_Duration">Fever duration (days)</label>
+          <input type="number" id="Fever_Duration" name="Fever_Duration" required min="0" max="30" placeholder="Enter duration">
+          <p class="field-hint">Flagged clinically at &ge; 3 days</p>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="Platelet_Count">Platelet count (/&micro;L)</label>
+          <input type="number" id="Platelet_Count" name="Platelet_Count" required min="0" placeholder="Enter platelet count">
+          <p class="field-hint">Normal range 150,000&ndash;450,000; flagged below 150,000</p>
+        </div>
+        <div class="form-group">
+          <label for="WBC_Count">WBC count (/&micro;L)</label>
+          <input type="number" id="WBC_Count" name="WBC_Count" required min="0" placeholder="Enter WBC count">
+          <p class="field-hint">Normal range 4,000&ndash;11,000; flagged below 4,000</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Supporting symptoms</legend>
+      <div class="symptom-grid">
+        <label class="symptom-check"><input type="checkbox" name="Headache" value="1"> Headache</label>
+        <label class="symptom-check"><input type="checkbox" name="Myalgia" value="1"> Myalgia (muscle pain)</label>
+        <label class="symptom-check"><input type="checkbox" name="Joint_Pain" value="1"> Joint pain</label>
+        <label class="symptom-check"><input type="checkbox" name="Retro_Orbital_Pain" value="1"> Retro-orbital pain</label>
+        <label class="symptom-check"><input type="checkbox" name="Rash" value="1"> Rash</label>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn-primary" id="submit-btn">Assess risk</button>
+  </form>
+
+  <div class="result-panel" id="result-panel">
+    <div class="result-placeholder" id="result-placeholder">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 3v6l4 2" stroke-linecap="round"/><circle cx="12" cy="12" r="9"/>
+      </svg>
+      <p>Fill in the form and submit to see the predicted risk, its confidence, and the factors driving it.</p>
+    </div>
+    <div id="result-content" style="display:none;"></div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/predict.js') }}"></script>
+{% endblock %}

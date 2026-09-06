@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Model dashboard{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <svg class="hero-eyebrow-line" viewBox="0 0 1180 30" preserveAspectRatio="none" aria-hidden="true">
+    <polyline points="0,15 220,15 250,4 275,26 300,15 500,15 530,6 555,24 580,15 1180,15"
+      fill="none" stroke="currentColor" stroke-width="1.5" />
+  </svg>
+  <h1>Dengue risk model, trained on {{ metrics.n_samples }} Dhaka patient records</h1>
+  <p class="lede">A logistic regression classifier flags dengue-positive presentations from vitals, lab values and symptoms, so a clinician can see which factors are driving each score before deciding on further testing.</p>
+</section>
+
+<div class="kpi-strip">
+  <div class="kpi">
+    <p class="kpi-label">Accuracy</p>
+    <p class="kpi-value">{{ '%.1f'|format(metrics.scores.accuracy * 100) }}%</p>
+    <p class="kpi-sub">on held-out test set</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">Precision</p>
+    <p class="kpi-value">{{ '%.1f'|format(metrics.scores.precision * 100) }}%</p>
+    <p class="kpi-sub">of positive calls correct</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">Recall</p>
+    <p class="kpi-value">{{ '%.1f'|format(metrics.scores.recall * 100) }}%</p>
+    <p class="kpi-sub">of true cases caught</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">AUC-ROC</p>
+    <p class="kpi-value">{{ '%.3f'|format(metrics.scores.auc) }}</p>
+    <p class="kpi-sub">separability</p>
+  </div>
+  <div class="kpi">
+    <p class="kpi-label">5-fold CV</p>
+    <p class="kpi-value">{{ '%.1f'|format(metrics.scores.cv_mean * 100) }}%</p>
+    <p class="kpi-sub">&plusmn; {{ '%.1f'|format(metrics.scores.cv_std * 100) }} pts</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Classifier performance</h2>
+    <span class="section-note">{{ metrics.test_size }} held-out patients</span>
+  </div>
+  <div class="chart-grid">
+    <div class="panel">
+      <h3>ROC curve</h3>
+      <div class="chart-canvas-wrap"><canvas id="rocChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <h3>Confusion matrix</h3>
+      <div class="cm-grid">
+        <div class="cm-cell cm-corner"></div>
+        <div class="cm-cell cm-header">Predicted&nbsp;neg</div>
+        <div class="cm-cell cm-header">Predicted&nbsp;pos</div>
+        <div class="cm-cell cm-header">Actual&nbsp;neg</div>
+        <div class="cm-cell cm-tn"><span class="cm-value">{{ metrics.confusion_matrix[0][0] }}</span></div>
+        <div class="cm-cell cm-fp"><span class="cm-value">{{ metrics.confusion_matrix[0][1] }}</span></div>
+        <div class="cm-cell cm-header">Actual&nbsp;pos</div>
+        <div class="cm-cell cm-fn"><span class="cm-value">{{ metrics.confusion_matrix[1][0] }}</span></div>
+        <div class="cm-cell cm-tp"><span class="cm-value">{{ metrics.confusion_matrix[1][1] }}</span></div>
+      </div>
+      <p class="field-hint" style="margin-top:16px;">F1-score: {{ '%.3f'|format(metrics.scores.f1) }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>What drives the prediction</h2>
+    <span class="section-note">Random forest feature importance</span>
+  </div>
+  <div class="panel">
+    <div class="chart-canvas-wrap tall"><canvas id="importanceChart"></canvas></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Dataset composition</h2>
+    <span class="section-note">{{ metrics.n_samples }} records, deduplicated</span>
+  </div>
+  <div class="chart-grid">
+    <div class="panel">
+      <h3>Top 10 areas by record count</h3>
+      <div class="chart-canvas-wrap"><canvas id="areaChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <h3>Outcome distribution</h3>
+      <div class="chart-canvas-wrap"><canvas id="outcomeChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>Clinical separation by outcome</h2>
+    <span class="section-note">mean values, negative vs. positive</span>
+  </div>
+  <div class="chart-grid">
+    <div class="panel">
+      <h3>Platelets &amp; WBC (per &micro;L)</h3>
+      <div class="chart-canvas-wrap"><canvas id="labChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <h3>Temperature &amp; fever duration</h3>
+      <div class="chart-canvas-wrap"><canvas id="vitalsChart"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  const METRICS = {{ metrics | tojson }};
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

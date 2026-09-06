@@ -1,0 +1,107 @@
+{
+  "feature_order": [
+    "Gender",
+    "Area",
+    "AreaType",
+    "HouseType",
+    "Age",
+    "Fever_Duration",
+    "Body_Temperature",
+    "Platelet_Count",
+    "WBC_Count",
+    "Joint_Pain",
+    "Headache",
+    "Retro_Orbital_Pain",
+    "Myalgia",
+    "Rash"
+  ],
+  "categorical_choices": {
+    "Gender": [
+      "Female",
+      "Male"
+    ],
+    "Area": [
+      "Adabor",
+      "Badda",
+      "Banasree",
+      "Bangshal",
+      "Biman Bandar",
+      "Bosila",
+      "Cantonment",
+      "Chawkbazar",
+      "Demra",
+      "Dhanmondi",
+      "Dolaipar",
+      "Gendaria",
+      "Gulshan",
+      "Hazaribagh",
+      "Jatrabari",
+      "Kadamtali",
+      "Kafrul",
+      "Kalabagan",
+      "Kamrangirchar",
+      "Keraniganj",
+      "Khilgaon",
+      "Khilkhet",
+      "Lalbagh",
+      "Mirpur",
+      "Mohammadpur",
+      "Motijheel",
+      "New Market",
+      "Pallabi",
+      "Paltan",
+      "Ramna",
+      "Rampura",
+      "Sabujbagh",
+      "Shahbagh",
+      "Sher-e-Bangla Nagar",
+      "Shyampur",
+      "Sutrapur",
+      "Tejgaon",
+      "Uttara",
+      "kamarpara"
+    ],
+    "AreaType": [
+      "Developed",
+      "Undeveloped"
+    ],
+    "HouseType": [
+      "Building",
+      "Other"
+    ]
+  },
+  "numeric_ranges": {
+    "Age": {
+      "min": 8.0,
+      "max": 65.0,
+      "mean": 36.65791726105564
+    },
+    "Fever_Duration": {
+      "min": 1.0,
+      "max": 10.0,
+      "mean": 3.4770328102710413
+    },
+    "Body_Temperature": {
+      "min": 35.5,
+      "max": 41.0,
+      "mean": 38.131954350927245
+    },
+    "Platelet_Count": {
+      "min": 15000.0,
+      "max": 382537.0,
+      "mean": 157515.15577746078
+    },
+    "WBC_Count": {
+      "min": 1500.0,
+      "max": 11726.0,
+      "mean": 5087.242510699001
+    }
+  },
+  "binary_symptoms": [
+    "Joint_Pain",
+    "Headache",
+    "Retro_Orbital_Pain",
+    "Myalgia",
+    "Rash"
+  ]
+}

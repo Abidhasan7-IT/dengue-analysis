@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Dengue Risk Assessment{% endblock %} — Dhaka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="{{ url_for('dashboard') }}">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 24" width="34" height="20">
+          <polyline points="0,14 9,14 12,4 16,20 20,10 23,14 40,14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      Dengue Risk Assessment
+    </a>
+    <nav class="nav-links">
+      <a href="{{ url_for('dashboard') }}" class="{{ 'active' if active=='dashboard' else '' }}">Model dashboard</a>
+      <a href="{{ url_for('predict_form') }}" class="{{ 'active' if active=='predict' else '' }}">Assess a patient</a>
+    </nav>
+  </div>
+</header>
+<main>
+{% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+  <!-- Decision-support tool trained on Dhaka clinical intake data. Not a substitute for laboratory-confirmed diagnosis. -->
+  <p>Abid Hasan (ID:253044) </p>
+</footer>
+</body>
+</html>
